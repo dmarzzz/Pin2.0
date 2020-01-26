@@ -12,7 +12,9 @@ const Map = (location) => {
   const [map, setMap] = useState(null);
   const mapContainer = useRef(null);
 
-  console.log(location.location.longitude);
+  console.log(location);
+
+  console.log(location);
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -21,7 +23,7 @@ const Map = (location) => {
       const map = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/dmarzhotbarz/ck5u4qywr3lr31iq0rg9smoiz", // stylesheet location
-        center: [ location.location.latitude, location.location.longitude],
+        center: [ location.latitude, location.longitude],
         zoom: 13
       });
 
@@ -32,7 +34,7 @@ const Map = (location) => {
     };
 
     if (!map) initializeMap({ setMap, mapContainer });
-  });
+  }, [map, location.latitude, location.longitude]);
 
   return <div ref={el => (mapContainer.current = el)} style={styles} />;
 };
