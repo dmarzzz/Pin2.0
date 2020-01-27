@@ -3,7 +3,11 @@ import { Card, withStyles,makeStyles , Grid, TextField, Button, FormControlLabel
 import { Face, Fingerprint } from '@material-ui/icons';
 import useAxios from 'axios-hooks';
 import axios from 'axios';
-
+import {Redirect} from 'react-router-dom';
+import {
+  withRouter
+} from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 
 
@@ -22,19 +26,37 @@ const useStyles = makeStyles(theme => ({
 
 
 
+
+
 function LoginFunc(){
+
+  let history = useHistory();
+
+    function handleLogin() {
+      history.push("/");
+    }
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [failed , setFailed] = useState('');
   const classes = useStyles();
 
   function submitLogin(){
     console.log('Username : ' + username);
     console.log('Password : ' + password);
 
-    axios.post('http://localhost:8080/loginCredentials?username=' + username + '&password='+password)
+    axios.post('http://localhost:7373/loginCredentials?username=' + username + '&password='+password)
     .then(res => {
-      console.log(res.data);
+      console.log(res);
+      if (res.data) {
+        console.log("succeed");
+        handleLogin();
+
+      }
+      else{
+        console.log("failed");
+        setFailed(<h1>Failed</h1>);
+      }
     })
 
   }
@@ -44,7 +66,9 @@ function LoginFunc(){
 
     <Card className = {classes.card} >
         <div className={classes.margin}>
+                      {failed}
             <Grid container spacing={8} alignItems="flex-end">
+
                 <Grid item>
                     <Face />
                 </Grid>
@@ -82,4 +106,4 @@ function LoginFunc(){
 
 }
 
-export default LoginFunc;
+export default withRouter(LoginFunc);
