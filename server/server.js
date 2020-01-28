@@ -15,6 +15,7 @@ app.post('/loginCredentials' , function(req , res ) {
   var username = req.query.username;
   var password = req.query.password;
   console.log("user name : " + username + " password :" + password);
+  //yes this is bad loging in.. but no need to set up DB yet
   if (username = 'testUser991') {
     if (password === 'dreaming') {
       res.send(true);

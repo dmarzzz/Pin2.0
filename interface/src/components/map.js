@@ -9,6 +9,9 @@ const styles = {
 };
 
 const Map = (location) => {
+
+
+
   const [map, setMap] = useState(null);
   const mapContainer = useRef(null);
 
@@ -35,6 +38,7 @@ const Map = (location) => {
 
     if (!map) initializeMap({ setMap, mapContainer });
   }, [map, location.latitude, location.longitude]);
+
 
   return <div ref={el => (mapContainer.current = el)} style={styles} />;
 };

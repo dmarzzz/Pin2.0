@@ -51,7 +51,6 @@ function LoginFunc(){
       if (res.data) {
         console.log("succeed");
         handleLogin();
-
       }
       else{
         console.log("failed");
