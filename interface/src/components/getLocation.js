@@ -1,7 +1,6 @@
-import React from 'react';
 
 
-
+//not being used right now but offers and alternative to pulling Long&Lat from browser
 export default function GetLocation(){
 
   return new Promise((resolve) => {
