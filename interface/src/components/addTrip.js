@@ -16,6 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { ListItemAvatar } from '@material-ui/core';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ClearIcon from '@material-ui/icons/Clear';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     fab: {
@@ -29,11 +30,30 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+// function submitFiles(){
+//     console.log('In Files');
+
+
+//     axios.post('http://localhost:7373/upload' )
+//     .then(res => {
+//       console.log(res);
+//       if (res.data) {
+//         console.log("succeed");
+//         handleLogin();
+//       }
+//       else{
+//         console.log("failed");
+//         setFailed(<h1>Failed</h1>);
+//       }
+//     })
+
+//   }
 
 export default function AddTrip() {
 
     const [tripUpload, setTripUpload] = useState(null);
     const [documents, setDocuments] = useState([]);
+    const [tripName, setTripName] = useState(null);
 
     const handleTripUploadOpen = () => {
         setTripUpload(true);
@@ -42,17 +62,17 @@ export default function AddTrip() {
         setTripUpload(false);
     }
 
-    // function arrayRemove(arr, value) {
+    function arrayRemove(arr, value) {
 
-    //     return arr.filter(function(ele){
-    //         return ele.name !== value;
-    //     });
+        return arr.filter(function(ele){
+            return ele.name !== value;
+        });
      
-    //  }
+     }
 
-    // function removeDocument(docName) {
-    //     setDocuments(arrayRemove(documents, docName));
-    // }
+    function removeDocument(docName) {
+        setDocuments(arrayRemove(documents, docName));
+    }
 
     const classes = useStyles();
 
@@ -71,6 +91,7 @@ export default function AddTrip() {
                         type="tripName"
                         fullWidth
                         size='medium'
+                        onChange={e => { setTripName(e)} }
                     />
                 </DialogTitle>
 
@@ -82,9 +103,9 @@ export default function AddTrip() {
                                     <AttachFileIcon />
                                 </ListItemAvatar>
                                 <ListItemText primary={document.name} />
-                                <ListItemSecondaryAction onClick={console.log(document.name)}>
+                                <ListItemSecondaryAction >
                                     <IconButton   >
-                                        <ClearIcon  />
+                                        <ClearIcon onClick={() => {console.log(document.name);removeDocument(document.name);}} />
                                     </IconButton>
                                 </ListItemSecondaryAction>
                             </ListItem>
