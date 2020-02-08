@@ -4,6 +4,15 @@ const port = process.env.PORT || 7373;
 var exif = require('exif-reader');
 var ExifImage = require('exif').ExifImage;
 
+
+
+//DMS = DD
+// ex:  [30 , 15, 50 ] = 30 + 15/60 + 50/3600
+//  LHS is Decimal Minute Second format, right side is how to calc Decimal Degree Format
+function dmsTodd(data){
+  return  ( data[0] + (data[1] / 60)  + (data[2] / 3600) );
+}
+
 // console.log that your server is up and running
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
@@ -21,13 +30,23 @@ app.post('/upload', function(req , res ) {
             console.log('Error: '+error.message);
         else
             console.log(exifData); // Do something with your data!
+            console.log("GP$ Data " , exifData.gps);
+
+            var longDMS = exifData.gps.GPSLatitude;
+            var latDMS = exifData.gps.GPSLongitude;
+            var longDD = (  ( exifData.gps.GPSLatitudeRef !== 'N' ) ?  - dmsTodd(latDMS) :dmsTodd(latDMS)  );
+            var latDD = (  ( exifData.gps.GPSLongitudeRef !== 'E' ) ?  - dmsTodd(longDMS) :dmsTodd(longDMS)  );
+            console.log('longDMS : ' + longDMS + ' longDD : ' + longDD );
+            console.log('latDMS : ' + latDMS + ' latDD : ' + latDD  );
+            res.send({latitude : latDD , longitude : longDD});
+
     });
 } catch (error) {
     console.log('Error: ' + error.message);
 }
 
 
-  res.send("true chainz");
+
   // uploadFile.mv(
   //   `${__dirname}/test/${fileName}`,
   //   function (err) {
