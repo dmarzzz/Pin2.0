@@ -16,6 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { ListItemAvatar } from '@material-ui/core';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ClearIcon from '@material-ui/icons/Clear';
+import useAxios from 'axios-hooks';
 import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
@@ -30,26 +31,25 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-// function submitFiles(){
-//     console.log('In Files');
 
 
-//     axios.post('http://localhost:7373/upload' )
-//     .then(res => {
-//       console.log(res);
-//       if (res.data) {
-//         console.log("succeed");
-//         handleLogin();
-//       }
-//       else{
-//         console.log("failed");
-//         setFailed(<h1>Failed</h1>);
-//       }
-//     })
 
-//   }
 
-export default function AddTrip() {
+function AddTrip() {
+
+    function submitFiles(){
+        console.log('in hurr');
+            axios.post('http://localhost:7373/upload?files=' + documents)
+            .then(res => {
+              console.log(res);
+              if (res.data) {
+                console.log("succeed");
+              }
+              else{
+                console.log("failed");
+              }
+            })
+          }
 
     const [tripUpload, setTripUpload] = useState(null);
     const [documents, setDocuments] = useState([]);
@@ -132,7 +132,7 @@ export default function AddTrip() {
                     <Button onClick={() => { handleTripUploadClose(); setDocuments([]); }} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleTripUploadClose} color="primary">
+                    <Button onClick={() => {handleTripUploadClose(); submitFiles(); }} color="primary">
                         Add
                     </Button>
                 </DialogActions>
@@ -140,3 +140,6 @@ export default function AddTrip() {
         </div>
     );
 }
+
+
+export default AddTrip;
