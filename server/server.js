@@ -1,10 +1,14 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 7373;
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
 var exif = require('exif-reader');
 var ExifImage = require('exif').ExifImage;
 
-
+// const storage = multer.diskStorage({
+//   destination: function(req, file, cb) {}
+// })
 
 //DMS = DD
 // ex:  [30 , 15, 50 ] = 30 + 15/60 + 50/3600
@@ -21,11 +25,13 @@ app.get('/', (req, res) => {
   res.send({ connection: true });
 });
 
-app.post('/upload', function(req , res ) {
-  console.log(req.query.files);
+app.post('/upload', upload.array('images'), function(req , res ) {
+  //console.log(JSON.stringify(req.query.files, null, 4));
+  console.log(req.files[0].filename);
   
   try {
-    new ExifImage({ image : 'myImage.jpg' }, function (error, exifData) {
+    req.files.map(file => {
+      new ExifImage({ image : './uploads/' + file.filename }, function (error, exifData) {
         if (error)
             console.log('Error: '+error.message);
         else
@@ -41,6 +47,7 @@ app.post('/upload', function(req , res ) {
             res.send({latitude : latDD , longitude : longDD});
 
     });
+  });
 } catch (error) {
     console.log('Error: ' + error.message);
 }

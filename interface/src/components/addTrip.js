@@ -18,6 +18,7 @@ import AttachFileIcon from '@material-ui/icons/AttachFile';
 import ClearIcon from '@material-ui/icons/Clear';
 import useAxios from 'axios-hooks';
 import axios from 'axios';
+import FormData from 'form-data';
 
 const useStyles = makeStyles(theme => ({
     fab: {
@@ -38,18 +39,29 @@ const useStyles = makeStyles(theme => ({
 function AddTrip() {
 
     function submitFiles(){
+        let data = new FormData();
+        let counter = 0;
         console.log('in hurr');
-            axios.post('http://localhost:7373/upload?files=' + documents)
-            .then(res => {
-              console.log(res);
-              if (res.data) {
-                console.log("succeed");
-              }
-              else{
-                console.log("failed");
-              }
-            })
-          }
+
+        documents.map(file => {
+            data.append('images', file, file.name);
+        });
+
+        const config = {
+            headers: { 'content-type': 'multipart/form-data' }
+        }
+
+        axios.post('http://localhost:7373/upload', data, config)
+        .then(res => {
+            console.log(res);
+            if (res.data) {
+            console.log("succeed");
+            }
+            else{
+            console.log("failed");
+            }
+        })
+    }
 
     const [tripUpload, setTripUpload] = useState(null);
     const [documents, setDocuments] = useState([]);
