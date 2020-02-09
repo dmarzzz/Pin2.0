@@ -40,8 +40,8 @@ app.post('/upload', upload.array('images'), function(req , res ) {
 
             var longDMS = exifData.gps.GPSLatitude;
             var latDMS = exifData.gps.GPSLongitude;
-            var longDD = (  ( exifData.gps.GPSLatitudeRef !== 'N' ) ?  - dmsTodd(latDMS) :dmsTodd(latDMS)  );
-            var latDD = (  ( exifData.gps.GPSLongitudeRef !== 'E' ) ?  - dmsTodd(longDMS) :dmsTodd(longDMS)  );
+            var longDD = (  ( exifData.gps.GPSLatitudeRef !== 'N' ) ?   dmsTodd(latDMS) :-dmsTodd(latDMS)  );
+            var latDD = (  ( exifData.gps.GPSLongitudeRef !== 'E' ) ?   dmsTodd(longDMS) :-dmsTodd(longDMS)  );
             console.log('longDMS : ' + longDMS + ' longDD : ' + longDD );
             console.log('latDMS : ' + latDMS + ' latDD : ' + latDD  );
             res.send({latitude : latDD , longitude : longDD});
