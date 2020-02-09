@@ -8,21 +8,19 @@ import NavBar from './components/navBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-
-
+//sets global theme
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
   },
 });
 
-
+// main routing component
+//currently routing is turned off but we render all the main components here
 const routing = (
-
   <BrowserRouter >
     <MuiThemeProvider theme={theme}>
     <CssBaseline />
-      <AddTrip />
       <NavBar />
       <App />
     </MuiThemeProvider>
