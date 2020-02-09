@@ -25,13 +25,13 @@ import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   fab: {
-      position: 'absolute',
-      bottom: theme.spacing(2),
-      right: theme.spacing(2),
-      zIndex: 100,
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+    zIndex: 100,
   },
   input: {
-      display: 'none',
+    display: 'none',
   },
 }));
 
@@ -46,44 +46,50 @@ const MAPBOX_TOKEN = 'pk.eyJ1IjoiZG1hcnpob3RiYXJ6IiwiYSI6ImNrMGdzNW44NjBheWgzY3F
 function App() {
 
 
-  function submitFiles(){
+  function submitFiles() {
+
+
     console.log('in hurr');
-        axios.post('http://localhost:7373/upload?files=' + documents)
-        .then(res => {
-          console.log(res);
-          if (res.data) {
-            console.log("succeed");
-          }
-          else{
-            console.log("failed");
-          }
-        })
-      }
+    axios.post('http://localhost:7373/upload?files=' + documents)
+      .then(res => {
+        console.log(res);
+        if (res.data) {
+          console.log("succeed " + res.data.latitude);
+          console.log("succeed " + res.data.longitude);
+          setData([ { "city": "New York", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Above_Gotham.jpg/240px-Above_Gotham.jpg", "state": "New York", "latitude": res.data.latitude, "longitude": res.data.longitude }])
+        }
+        else {
+          console.log("failed");
+        }
+      })
 
-const [tripUpload, setTripUpload] = useState(null);
-const [documents, setDocuments] = useState([]);
-const [tripName, setTripName] = useState(null);
 
-const handleTripUploadOpen = () => {
+  }
+
+  const [tripUpload, setTripUpload] = useState(null);
+  const [documents, setDocuments] = useState([]);
+  const [tripName, setTripName] = useState(null);
+
+  const handleTripUploadOpen = () => {
     setTripUpload(true);
-}
-const handleTripUploadClose = () => {
+  }
+  const handleTripUploadClose = () => {
     setTripUpload(false);
-}
+  }
 
-function arrayRemove(arr, value) {
+  function arrayRemove(arr, value) {
 
-    return arr.filter(function(ele){
-        return ele.name !== value;
+    return arr.filter(function (ele) {
+      return ele.name !== value;
     });
- 
- }
 
-function removeDocument(docName) {
+  }
+
+  function removeDocument(docName) {
     setDocuments(arrayRemove(documents, docName));
-}
+  }
 
-const classes = useStyles();
+  const classes = useStyles();
   //state declarations:
   //states to manage initial map coordinates
   const [longitude, setLongitude] = useState(38);
@@ -100,6 +106,13 @@ const classes = useStyles();
   const [popUpLatitude, setPopUpLatitude] = useState(0);
   const [popupInfo, setPopupInfo] = useState(false);
   const [popUpURL, setPopUpURL] = useState(null);
+  const [data, setData] = useState([
+    { "city": "New York", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Above_Gotham.jpg/240px-Above_Gotham.jpg", "state": "New York", "latitude": 40.6643, "longitude": -73.9385 },
+    { "city": "Los Angeles", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/5/57/LA_Skyline_Mountains2.jpg/240px-LA_Skyline_Mountains2.jpg", "state": "California", "latitude": 34.0194, "longitude": -118.4108 },
+    { "city": "Philadelphia", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Philly_skyline.jpg/240px-Philly_skyline.jpg", "state": "Pennsylvania", "latitude": 40.0094, "longitude": -75.1333 },
+    { "city": "San Francisco", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/San_Francisco_skyline_from_Coit_Tower.jpg/240px-San_Francisco_skyline_from_Coit_Tower.jpg", "state": "California", "latitude": 37.7751, "longitude": -122.4193 },
+    { "city": "Seattle", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/3/36/SeattleI5Skyline.jpg/240px-SeattleI5Skyline.jpg", "state": "Washington", "latitude": 47.6205, "longitude": -122.3509 },
+  ]);
 
   //pulls long and lat from browser
   useEffect(() => {
@@ -126,24 +139,18 @@ const classes = useStyles();
         longitude={popUpLongitude}
         latitude={popUpLatitude}
         closeOnClick={false}
-        onClose={() => {closePopUp(); setPopUpURL(null);} }
+        onClose={() => { closePopUp(); setPopUpURL(null); }}
       >
         <div>
-        <img width={480} src={popUpURL} alt="thing" />
-      </div>
+          <img width={480} src={popUpURL} alt="thing" />
+        </div>
       </Popup>
     );
   }
 
   //places all pins on map
   function Pins() {
-    var data = [
-      { "city": "New York", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Above_Gotham.jpg/240px-Above_Gotham.jpg", "state": "New York", "latitude": 40.6643, "longitude": -73.9385 },
-      { "city": "Los Angeles", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/5/57/LA_Skyline_Mountains2.jpg/240px-LA_Skyline_Mountains2.jpg", "state": "California", "latitude": 34.0194, "longitude": -118.4108 },
-      { "city": "Philadelphia", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Philly_skyline.jpg/240px-Philly_skyline.jpg", "state": "Pennsylvania", "latitude": 40.0094, "longitude": -75.1333 },
-      { "city": "San Francisco", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/San_Francisco_skyline_from_Coit_Tower.jpg/240px-San_Francisco_skyline_from_Coit_Tower.jpg", "state": "California", "latitude": 37.7751, "longitude": -122.4193 },
-      { "city": "Seattle", "image": "http://upload.wikimedia.org/wikipedia/commons/thumb/3/36/SeattleI5Skyline.jpg/240px-SeattleI5Skyline.jpg", "state": "Washington", "latitude": 47.6205, "longitude": -122.3509 },
-    ]
+
     return (
       data.map(datum => (
         <div>
@@ -183,67 +190,68 @@ const classes = useStyles();
           {renderPopup()}
         </MapGL>
       </div>
+
       <div className="fab-container">
-      <div className={classes.fab} >
-            <Fab color="primary" aria-label="add" onClick={handleTripUploadOpen} >
-                <AddIcon />
-            </Fab>
-            <Dialog open={tripUpload} onClose={() => { handleTripUploadClose(); setDocuments([]); }} aria-labelledby="form-dialog-title">
+        <div className={classes.fab} >
+          <Fab color="primary" aria-label="add" onClick={handleTripUploadOpen} >
+            <AddIcon />
+          </Fab>
+          <Dialog open={tripUpload} onClose={() => { handleTripUploadClose(); setDocuments([]); }} aria-labelledby="form-dialog-title">
 
-                <DialogTitle id="form-dialog-title">
-                    <TextField
-                        margin="dense"
-                        id="name"
-                        label="Trip Name"
-                        type="tripName"
-                        fullWidth
-                        size='medium'
-                        onChange={e => { setTripName(e)} }
-                    />
-                </DialogTitle>
+            <DialogTitle id="form-dialog-title">
+              <TextField
+                margin="dense"
+                id="name"
+                label="Trip Name"
+                type="tripName"
+                fullWidth
+                size='medium'
+                onChange={e => { setTripName(e) }}
+              />
+            </DialogTitle>
 
-                <DialogContent>
-                    <List >
-                        {documents.map(document => (
-                            <ListItem button key={document.name}>
-                                <ListItemAvatar>
-                                    <AttachFileIcon />
-                                </ListItemAvatar>
-                                <ListItemText primary={document.name} />
-                                <ListItemSecondaryAction >
-                                    <IconButton   >
-                                        <ClearIcon onClick={() => {console.log(document.name);removeDocument(document.name);}} />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        )
-                        )}
-                    </List>
-                    <input
-                        accept="image/*"
-                        className={classes.input}
-                        id="file"
-                        multiple
-                        size='medium'
-                        type="file"
-                        onChange={e => { setDocuments([...e.target.files]); }}
-                    />
-                    <label htmlFor="file">
-                        <Button raised component="span" className={classes.button} >
-                            Upload
+            <DialogContent>
+              <List >
+                {documents.map(document => (
+                  <ListItem button key={document.name}>
+                    <ListItemAvatar>
+                      <AttachFileIcon />
+                    </ListItemAvatar>
+                    <ListItemText primary={document.name} />
+                    <ListItemSecondaryAction >
+                      <IconButton   >
+                        <ClearIcon onClick={() => { console.log(document.name); removeDocument(document.name); }} />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                )
+                )}
+              </List>
+              <input
+                accept="image/*"
+                className={classes.input}
+                id="file"
+                multiple
+                size='medium'
+                type="file"
+                onChange={e => { setDocuments([...e.target.files]); }}
+              />
+              <label htmlFor="file">
+                <Button raised component="span" className={classes.button} >
+                  Upload
                         </Button>
-                    </label>
+              </label>
 
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => { handleTripUploadClose(); setDocuments([]); }} color="primary">
-                        Cancel
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => { handleTripUploadClose(); setDocuments([]); }} color="primary">
+                Cancel
                     </Button>
-                    <Button onClick={() => {handleTripUploadClose(); submitFiles(); }} color="primary">
-                        Add
+              <Button onClick={() => { handleTripUploadClose(); submitFiles(); }} color="primary">
+                Add
                     </Button>
-                </DialogActions>
-            </Dialog>
+            </DialogActions>
+          </Dialog>
         </div>
 
       </div>
